@@ -1,0 +1,125 @@
+/*
+    Theme Name: Portfolio Wordpress
+    Author: Conerlious Z Sagandira
+    Description: This is my theme portfolio
+*/
+
+/* Slideout Menu...Not working in this portfoli, will be used in the main project  */
+#slideout-menu {
+    display: none;
+    background: #2d3436;
+    z-index: 100;
+    position: fixed;
+    transition: 0.4s;
+    margin-top: 72px;
+    width: 100%;
+    text-align: center;
+    opacity:0;
+    pointer-events:none;
+  }
+  
+  #slideout-menu ul {
+    list-style: none;
+    padding: 0 32px;
+  }
+  
+  #slideout-menu ul li {
+    padding: 8px;
+  }
+  
+  #slideout-menu a {
+    font-family: "Roboto Condensed", sans-serif;
+    font-size: 20px;
+    color: white;
+  }
+  
+  #slideout-menu input {
+    width: 85%;
+    padding: 8px;
+    font-family: "Roboto Condensed", sans-serif;
+    font-size: 20px;
+    text-align: center;
+  }
+* {
+    margin: 0;
+    padding: 0;
+    font-family: arial;
+    text-decoration: none;
+}
+
+p {
+    margin: 20px 0px;
+}
+
+h1 {
+    margin: 40px 0px;
+}
+
+
+body {
+    height: 100%;
+}
+
+#logo {
+    display: inline;
+    font-size: 30px;
+    font-weight: 700;
+    color: beige;
+  
+}
+
+nav {
+    background-color: rgb(24, 22, 22);
+    padding: 50px;
+    text-decoration: none;
+}
+ul {
+    float: right;
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: 300;
+}
+
+li {
+    display: inline;
+    
+}
+
+#wrapper a {
+    text-decoration: none;
+    background-color: black;
+    color: white;
+    padding: 5px;
+}
+
+
+footer {
+    background-color: rgb(5, 5, 5);
+    padding: 50px;
+    clear: both;    
+    right: 0;
+    bottom: 0;
+    left: 0;
+    color: beige;
+}
+
+.site-wrapper {
+    width: 1200px;
+    margin: auto;
+    margin-top: 50px;
+}
+
+
+.proj {
+    width: 33,3%;
+    float: left;
+}
+
+#container {
+    height: 400px;
+    box-sizing: border-box;
+    width: 300px;
+    float: left;
+    margin: 0px 50px;
+}
+
