@@ -1,0 +1,476 @@
+---
+title: "Cyclistic Bike share - Case study"
+author: "Conerlious Z Sagandira"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+  
+## Introduction
+
+This analysis is for a Google Analytics Certificate capstone project. Kevin Hartman's case study was the inspiration for this piece.
+
+A company called Cyclistic developed a successful bike-share program in 2016. Since then, the initiative has grown to include a fleet of 5,824 bicycles that are geotracked and locked into 692 stations throughout Chicago.
+
+Until date, Cyclistic's marketing strategy has focused on building general awareness and appealing to a wide range of consumers. "Casual" riders are customers who purchase single-ride or full-day passes. Cyclistic "members" are customers who purchase annual memberships.
+
+Annual members are substantially more profitable than casual riders, according to Cyclistic's financial analysts. The company's future prosperity, according to the director of marketing, hinges on increasing the number of yearly subscribers. The full document to the case study can be found in the [Google Data Analytics Capstone: A Complete Case Study](https://www.coursera.org/learn/google-data-analytics-capstone)
+
+##### Approach
+I used the five (5 phases) of data analysis which are ASK, PREPARE, PROCESS, ANALYZE and SHARE to guide me. 
+
+### Phase 1: Ask
+<span style="text-decoration:underline">**Defining the problem**</span> 
+
+As Cyclistic realized that having more annual customers than casual riders will improve their earnings. They want to reach out to their "casual" riders, to convince them to switch to an annual subscription. In order to do so, they must first determine how the "casual" and "annual" customers differ in order to create a targeted and effective marketing message for the "casual" customers. 
+
+<span style="text-decoration:underline">**Business Task**</span> 
+
+The business task is to identify the differences between casual and annual riders in order to come up with a proper message to campaign to the casual users convincing them to switch to annual subscription. Hence, the question to be answered is: 
+
+_**How do annual members and casual riders use Cyclistic bikes differently?**_
+
+<span style="text-decoration:underline">**Key Stakeholders**</span> 
+
++ Cyclistic executive team
++ My manager, Lily Moreno
++ Director of marketing 
++ The rest of the marketing analytics team
+
+### Phase 2: Prepare
+<span style="text-decoration:underline">**Data Preperation**</span> 
+
+**Source of Data**
+
++ Data was collected from [Motivate International Inc](https://divvy-tripdata.s3.amazonaws.com/index.html) under this [license](https://ride.divvybikes.com/data-license-agreement). Hence, it is public data. 
++ Since Cyclistic is a fictional company, the datasets have different names. 
+
+**Data organization**
+
++ 12 csv. Files
++ 13 variables
+
+**Data credibility**
+
++ The data appears to be in good condition, and it is first-hand information, with a large number of entries and a lot of important information.
+
+**ROCCC Analysis** 
+
++ Reliability - I think it is reliable although it is not clear if it was vetted. 
+
++ Original - Yes
+
++ Comprehensive - I think the data is not 100% comprehensive since some information is missing although its nominal.  
+
++ Current - 12 months old 
+
++ Cited - Yes
+
+**Sort and filter the Data**
+The data which i used was from 2021-2022. This is so because it is the most relevant period to the aforementioned **business task**. In addition to that, it is the period when the data is complete whereby all geo-location coordinates and bike types are included. 
+
+
+
+ **Install the required packages:**
+
+```{r}
+library("tidyverse")
+library("ggplot2")
+library("lubridate")
+library("knitr")
+library("dplyr")
+```
+**Loading Data From 02/2021 to 01/2022**
+
+_X202102_divvy_tripdata <- read_csv("Documents/bike_share_projects/202102-divvy-tripdata.csv")_
+
+_X202103_divvy_tripdata <- read_csv("Documents/bike_share_projects/202103-divvy-tripdata.csv")_
+
+_X202104_divvy_tripdata <- read_csv("Documents/bike_share_projects/202104-divvy-tripdata.csv")_
+
+_X202105_divvy_tripdata <- read_csv("Documents/bike_share_projects/202105-divvy-tripdata.csv")_
+
+_X202106_divvy_tripdata <- read_csv("Documents/bike_share_projects/202106-divvy-tripdata.csv")_
+
+_X202107_divvy_tripdata <- read_csv("Documents/bike_share_projects/202107-divvy-tripdata.csv")_
+
+_X202108_divvy_tripdata <- read_csv("Documents/bike_share_projects/202108-divvy-tripdata.csv")_
+
+_X202109_divvy_tripdata <- read_csv("Documents/bike_share_projects/202109-divvy-tripdata.csv")_
+
+_X202110_divvy_tripdata <- read_csv("Documents/bike_share_projects/202110-divvy-tripdata.csv")_
+
+_X202111_divvy_tripdata <- read_csv("Documents/bike_share_projects/202111-divvy-tripdata.csv")_
+
+_X202112_divvy_tripdata <- read_csv("Documents/bike_share_projects/202112-divvy-tripdata.csv")_
+
+_X202201_divvy_tripdata <- read_csv("Documents/bike_share_projects/202201-divvy-tripdata.csv")_
+
+**Result.**
+```{r}
+# X202102_divvy_tripdata <- read_csv("Documents/bike_share_projects/202102-divvy-tripdata.csv")
+# Rows: 49622 Columns: 13                                                                                                                      
+# ── Column specification ──────────────────────────────────────────────────────────────────────────────────
+# Delimiter: ","
+# chr  (7): ride_id, rideable_type, start_station_name, start_station_id, end_station_name, end_station_...
+# dbl  (4): start_lat, start_lng, end_lat, end_lng
+# dttm (2): started_at, ended_at
+# 
+# ℹ Use `spec()` to retrieve the full column specification for this data.
+# ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+# > X202103_divvy_tripdata <- read_csv("Documents/bike_share_projects/202103-divvy-tripdata.csv")
+# Rows: 228496 Columns: 13                                                                                                                     
+# ── Column specification ──────────────────────────────────────────────────────────────────────────────────
+# Delimiter: ","
+# chr  (7): ride_id, rideable_type, start_station_name, start_station_id, end_station_name, end_station_...
+# dbl  (4): start_lat, start_lng, end_lat, end_lng
+# dttm (2): started_at, ended_at
+# 
+# ℹ Use `spec()` to retrieve the full column specification for this data.
+# ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+# > X202104_divvy_tripdata <- read_csv("Documents/bike_share_projects/202104-divvy-tripdata.csv")
+# Rows: 337230 Columns: 13                                                                                                                     
+# ── Column specification ──────────────────────────────────────────────────────────────────────────────────
+# Delimiter: ","
+# chr  (7): ride_id, rideable_type, start_station_name, start_station_id, end_station_name, end_station_...
+# dbl  (4): start_lat, start_lng, end_lat, end_lng
+# dttm (2): started_at, ended_at
+# 
+# ℹ Use `spec()` to retrieve the full column specification for this data.
+# ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+# > X202105_divvy_tripdata <- read_csv("Documents/bike_share_projects/202105-divvy-tripdata.csv")
+# Rows: 531633 Columns: 13                                                                                                                     
+# ── Column specification ──────────────────────────────────────────────────────────────────────────────────
+# Delimiter: ","
+# chr  (7): ride_id, rideable_type, start_station_name, start_station_id, end_station_name, end_station_...
+# dbl  (4): start_lat, start_lng, end_lat, end_lng
+# dttm (2): started_at, ended_at
+# 
+# ℹ Use `spec()` to retrieve the full column specification for this data.
+# ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+# > X202106_divvy_tripdata <- read_csv("Documents/bike_share_projects/202106-divvy-tripdata.csv")
+# Rows: 729595 Columns: 13                                                                                                                     
+# ── Column specification ──────────────────────────────────────────────────────────────────────────────────
+# Delimiter: ","
+# chr  (7): ride_id, rideable_type, start_station_name, start_station_id, end_station_name, end_station_...
+# dbl  (4): start_lat, start_lng, end_lat, end_lng
+# dttm (2): started_at, ended_at
+# 
+# ℹ Use `spec()` to retrieve the full column specification for this data.
+# ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+# > X202107_divvy_tripdata <- read_csv("Documents/bike_share_projects/202107-divvy-tripdata.csv")
+# Rows: 822410 Columns: 13                                                                                                                     
+# ── Column specification ──────────────────────────────────────────────────────────────────────────────────
+# Delimiter: ","
+# chr  (7): ride_id, rideable_type, start_station_name, start_station_id, end_station_name, end_station_...
+# dbl  (4): start_lat, start_lng, end_lat, end_lng
+# dttm (2): started_at, ended_at
+# 
+# ℹ Use `spec()` to retrieve the full column specification for this data.
+# ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+# > X202108_divvy_tripdata <- read_csv("Documents/bike_share_projects/202108-divvy-tripdata.csv")
+# Rows: 804352 Columns: 13                                                                                                                     
+# ── Column specification ──────────────────────────────────────────────────────────────────────────────────
+# Delimiter: ","
+# chr  (7): ride_id, rideable_type, start_station_name, start_station_id, end_station_name, end_station_...
+# dbl  (4): start_lat, start_lng, end_lat, end_lng
+# dttm (2): started_at, ended_at
+# 
+# ℹ Use `spec()` to retrieve the full column specification for this data.
+# ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+# > X202109_divvy_tripdata <- read_csv("Documents/bike_share_projects/202109-divvy-tripdata.csv")
+# Rows: 756147 Columns: 13                                                                                                                     
+# ── Column specification ──────────────────────────────────────────────────────────────────────────────────
+# Delimiter: ","
+# chr  (7): ride_id, rideable_type, start_station_name, start_station_id, end_station_name, end_station_...
+# dbl  (4): start_lat, start_lng, end_lat, end_lng
+# dttm (2): started_at, ended_at
+# 
+# ℹ Use `spec()` to retrieve the full column specification for this data.
+# ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+# > X202110_divvy_tripdata <- read_csv("Documents/bike_share_projects/202110-divvy-tripdata.csv")
+# Rows: 631226 Columns: 13                                                                                                                     
+# ── Column specification ──────────────────────────────────────────────────────────────────────────────────
+# Delimiter: ","
+# chr  (7): ride_id, rideable_type, start_station_name, start_station_id, end_station_name, end_station_...
+# dbl  (4): start_lat, start_lng, end_lat, end_lng
+# dttm (2): started_at, ended_at
+# 
+# ℹ Use `spec()` to retrieve the full column specification for this data.
+# ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+# > X202111_divvy_tripdata <- read_csv("Documents/bike_share_projects/202111-divvy-tripdata.csv")
+# Rows: 359978 Columns: 13                                                                                                                     
+# ── Column specification ──────────────────────────────────────────────────────────────────────────────────
+# Delimiter: ","
+# chr  (7): ride_id, rideable_type, start_station_name, start_station_id, end_station_name, end_station_...
+# dbl  (4): start_lat, start_lng, end_lat, end_lng
+# dttm (2): started_at, ended_at
+# 
+# ℹ Use `spec()` to retrieve the full column specification for this data.
+# ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+# > X202112_divvy_tripdata <- read_csv("Documents/bike_share_projects/202112-divvy-tripdata.csv")
+# Rows: 247540 Columns: 13                                                                                                                     
+# ── Column specification ──────────────────────────────────────────────────────────────────────────────────
+# Delimiter: ","
+# chr  (7): ride_id, rideable_type, start_station_name, start_station_id, end_station_name, end_station_...
+# dbl  (4): start_lat, start_lng, end_lat, end_lng
+# dttm (2): started_at, ended_at
+# 
+# ℹ Use `spec()` to retrieve the full column specification for this data.
+# ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+# > X202201_divvy_tripdata <- read_csv("Documents/bike_share_projects/202201-divvy-tripdata.csv")
+# Rows: 103770 Columns: 13                                                                                                                     
+# ── Column specification ──────────────────────────────────────────────────────────────────────────────────
+# Delimiter: ","
+# chr  (7): ride_id, rideable_type, start_station_name, start_station_id, end_station_name, end_station_...
+# dbl  (4): start_lat, start_lng, end_lat, end_lng
+# dttm (2): started_at, ended_at
+# 
+# ℹ Use `spec()` to retrieve the full column specification for this data.
+# ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+```
+
+**Combining all the data**
+
+_final_bike_share <- bind_rows(X202102_divvy_tripdata,X202103_divvy_tripdata,_
+                               _X202104_divvy_tripdata,X202105_divvy_tripdata,_
+                               _X202106_divvy_tripdata,X202107_divvy_tripdata,_ 
+                               _X202108_divvy_tripdata,X202109_divvy_tripdata,_ 
+                               _X202110_divvy_tripdata,X202111_divvy_tripdata,_ 
+                               _X202112_divvy_tripdata,X202201_divvy_tripdata)_
+
+
+
+### Phase 3: Process
+
+<span style="text-decoration:underline">**Data Wrangling and Cleaning**</span> 
+
+What i aimed to achieve on this phase was clean data and unifying complex data sets. To do so i considered the following:
+
++ **Data Acquisition** -> _Find incorrect and incomplete data using **R language** and **Excel**_
+
++ **Data Cleansing** -> _Handle missing data (Dropped all NA (NULL) values), and removing duplicated entries_ 
+
+**First, let's see how the data looks.** 
+
+_summary(final_bike_share)_
+
+```{r}
+# ride_id          rideable_type        started_at                     ended_at                  
+#  Length:5601999     Length:5601999     Min.   :2021-02-01 00:55:44   Min.   :2021-02-01 01:22:48  
+#  Class :character   Class :character   1st Qu.:2021-06-11 12:40:12   1st Qu.:2021-06-11 13:03:36  
+#  Mode  :character   Mode  :character   Median :2021-08-04 22:01:30   Median :2021-08-04 22:23:12  
+#                                        Mean   :2021-08-04 20:30:49   Mean   :2021-08-04 20:52:45  
+#                                        3rd Qu.:2021-09-28 16:39:49   3rd Qu.:2021-09-28 16:55:21  
+#                                        Max.   :2022-01-31 23:58:37   Max.   :2022-02-01 01:46:16  
+#                                                                                                   
+#  start_station_name start_station_id   end_station_name   end_station_id       start_lat    
+#  Length:5601999     Length:5601999     Length:5601999     Length:5601999     Min.   :41.64  
+#  Class :character   Class :character   Class :character   Class :character   1st Qu.:41.88  
+#  Mode  :character   Mode  :character   Mode  :character   Mode  :character   Median :41.90  
+#                                                                              Mean   :41.90  
+#                                                                              3rd Qu.:41.93  
+#                                                                              Max.   :45.64  
+#                                                                                             
+#    start_lng         end_lat         end_lng       member_casual     
+#  Min.   :-87.84   Min.   :41.39   Min.   :-88.97   Length:5601999    
+#  1st Qu.:-87.66   1st Qu.:41.88   1st Qu.:-87.66   Class :character  
+#  Median :-87.64   Median :41.90   Median :-87.64   Mode  :character  
+#  Mean   :-87.65   Mean   :41.90   Mean   :-87.65                     
+#  3rd Qu.:-87.63   3rd Qu.:41.93   3rd Qu.:-87.63                     
+#  Max.   :-73.80   Max.   :42.17   Max.   :-87.49                     
+#                   NA's   :4754    NA's   :4754    
+```
+
+**Drop all NA** _(Data cleaning)_
+
+As shown in the summary, there are 4754 NA (NULL) entities hence, i used _drop_na_ function to remove all null entities.
+
+```{r}
+#Clean_final_bike_share <- drop_na(final_bike_share)
+```
+
+**Adding new date variables** _(Data Acquisition)_
+
+I added date, month, day, year and year_of_the_week variables. 
+
+```{r}
+# clean_final_bike_share$date <- as.Date(clean_final_bike_share$started_at)
+# clean_final_bike_share$month <- format(as.Date(clean_final_bike_share$date), "%m")
+# clean_final_bike_share$day <- format(as.Date(clean_final_bike_share$date), "%d")
+# clean_final_bike_share$year <- format(as.Date(clean_final_bike_share$date), "%Y")
+# clean_final_bike_share$day_of_week <- format(as.Date(clean_final_bike_share$date), "%A")
+```
+
+### Phase 4: Analyze
+
+<span style="text-decoration:underline">**Identifying Trends and Relationships**</span> 
+
++ **Descriptive Statistics** -> _I performed descriptive statistics to identify differences in behavior between casual and member users._
+
+calculate the mean, median, max and min values of ride_length for casual and member type users _(descriptive statistics)_
+
+_Aggregate()_
+```{r}
+# aggregate(clean_final_bike_share$ride_length~clean_final_bike_share$ member_casual,FUN = mean)
+# aggregate(clean_final_bike_share$ ride_length~clean_final_bike_share$ member_casual,FUN = median)
+# aggregate(clean_final_bike_share$ ride_length~clean_final_bike_share$ member_casual,FUN = max)
+# aggregate(clean_final_bike_share$ ride_length~clean_final_bike_share$member_casual,FUN = min)
+```
+**Result.**
+```{r}
+# aggregate(clean_final_bike_share$ride_length~clean_final_bike_share$ member_casual,FUN = mean)
+#   clean_final_bike_share$member_casual clean_final_bike_share$ride_length
+# 1                               casual                     1951.2508 secs
+# 2                               member                      788.2088 secs
+# > aggregate(clean_final_bike_share$ ride_length~clean_final_bike_share$ member_casual,FUN = median)
+#   clean_final_bike_share$member_casual clean_final_bike_share$ride_length
+# 1                               casual                           998 secs
+# 2                               member                           580 secs
+# > aggregate(clean_final_bike_share$ ride_length~clean_final_bike_share$ member_casual,FUN = max)
+#   clean_final_bike_share$member_casual clean_final_bike_share$ride_length
+# 1                               casual                       3356649 secs
+# 2                               member                         89738 secs
+# > aggregate(clean_final_bike_share$ ride_length~clean_final_bike_share$member_casual,FUN = min)
+#   clean_final_bike_share$member_casual clean_final_bike_share$ride_length
+# 1                               casual                         0 secs
+# 2                               member                         0 secs
+```
+
+**Changing dates to days of the week from Sunday to Saturday**
+```{r}
+# clean_final_bike_share$day_of_week<-ordered(clean_final_bike_share$day_of_week,levels=c("Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"))
+```
+**Lets see how the average ride time for each day of the week looks like.** 
+
+_aggregate(clean_final_bike_share $ ride_length ~ clean_final_bike_share $ member_casual + clean_final_bike_share$day_of_week,FUN = mean)_
+
+
+**Result.**
+```{r}
+# clean_final_bike_share$member_casual clean_final_bike_share$day_of_week clean_final_bike_share$ride_length
+# 1                                casual                             Sunday                     2254.9429 secs
+# 2                                member                             Sunday                      909.2009 secs
+# 3                                casual                             Monday                     1959.4224 secs
+# 4                                member                             Monday                      761.4283 secs
+# 5                                casual                            Tuesday                     1724.8372 secs
+# 6                                member                            Tuesday                      740.6508 secs
+# 7                                casual                          Wednesday                     1699.4353 secs
+# 8                                member                          Wednesday                      744.1751 secs
+# 9                                casual                           Thursday                     1690.1134 secs
+# 10                               member                           Thursday                      737.9897 secs
+# 11                               casual                             Friday                     1854.9569 secs
+# 12                               member                             Friday                      765.7130 secs
+# 13                               casual                           Saturday                     2091.7230 secs
+# 14                               member                           Saturday                      886.2681 secs
+# > 
+```
+<span style="text-decoration:underline">**Creating Data Visualisations**</span> 
+
+**Average riding duration between casual and member riders.** 
+```{r}
+# my_plot_style = theme(plot.title=element_text(size=20),
+#                  axis.text.x=element_text(size=16), 
+#                  axis.text.y=element_text(size=16),
+#                  axis.title.x=element_text(size=18), 
+#                  axis.title.y=element_text(size=18),
+#                  strip.text.x=element_text(size=16), 
+#                  strip.text.y=element_text(size=16),
+#                  legend.title=element_text(size=18), 
+#                  legend.text=element_text(size=16))
+# 
+# options(repr.plot.width = 6, repr.plot.height = 8)
+# 
+# clean_final_bike_share %>% 
+#   group_by(member_casual) %>% 
+#   summarize(average_duration = mean(ride_length/60)) %>% 
+#   ggplot(aes(x = member_casual, y = average_duration)) +
+#   geom_col(position = "dodge") +
+#   labs(x = "Rider Type", y = "Average Duration (min)", 
+#        title = "Average Riding Duration by Rider Type", caption = "Data by Motivate International Inc") + my_plot_style
+# 
+```
+![](https://i.imgur.com/WkOWSjg.png)
+
+
+**Average riding duration of each day of the week between casual and member riders.**
+```{r}
+# options(repr.plot.width = 10, repr.plot.height = 8)
+# 
+# clean_final_bike_share %>% 
+#   group_by(member_casual, day_of_week) %>% 
+#   summarise(average_duration = mean(ride_length/60), .groups = 'drop') %>% 
+#   #arrange(member_casual, day_of_week) %>% 
+#   ggplot(aes(x = day_of_week, y = average_duration, fill = member_casual)) +
+#   geom_col(position = "dodge") +
+#   labs(x = "Day of Week", y = "Average Duration (min)", 
+#        fill = "Member/Casual",
+#        title = "Average Riding Duration by Day: Members vs. Casual Riders", caption = "Data by Motivate International Inc") + my_plot_style
+
+```
+![](https://i.imgur.com/BLobcOS.png)
+
+#### Analysis 
+
+<span style="text-decoration:underline">**Differences in behavior between Casual and Member users**</span> 
+
++ On average Casual users ride at least 30 minutes whilst Member users ride between 12-14 minutes at most. 
+
++ The average riding duration for Casual users is longer on Saturday and Sunday (weekends). 
+
+**Findings**
+
+Although Casual users on average ride the longest time more than member users during both weekdays and even more on weekends, member users ride more constantly through out the whole week. 
+
+_**I could not come up with any recommendations on this stage so i went a step further by:**_
+
++ _Checking the number of rides by user type during the week._
+
++ _Confirming the average travel distance by each user type._
+
+**Number of rides taken by each customer type during the week**
+```{r}
+# clean_final_bike_share %>%
+#   mutate(weekday = wday(started_at, label = TRUE))%>%
+#   group_by(member_casual, weekday)%>%
+#   summarise(number_of_rides=n(),average_duration=mean(ride_length))%>%
+#   arrange(member_casual, weekday)%>%
+#   ggplot(aes(x=weekday,y=number_of_rides,fill=member_casual))+
+#   geom_col(position="dodge") + 
+#   labs(title = "Number of rides by user type during the week", caption = "Data by Motivate International Inc")
+```
+![](https://i.imgur.com/BMzgXmI.png)
+
+**Mean travel distance by user type**
+```{r}
+# clean_final_bike_share <- ggplot(userType_means) + 
+#   geom_col(mapping=aes(x=member_casual,y=mean_distance,fill=member_casual), show.legend = FALSE)+
+#   labs(title = "Mean travel distance by User type",x="User Type",y="Mean distance In Km",caption = "Data by Motivate International Inc")
+# 
+# grid.arrange(clean_final_bike_share, ncol = 2)  
+```
+![](https://i.imgur.com/YsjWWzV.png)
+
+### Phase 5: Share
+
+<span style="text-decoration:underline">**Share my conclusions**</span> 
+
++ Considering the insights i have learned from the available data, i can now conclude and make recommendations on the business task _**How do annual members and casual riders use Cyclistic bikes differently?**_
+
+1. Casual users have most rides during weekends where tourism promotions are. 
+
+2. Member users have been taking more rides than casual members. 
+
+
+**Reccomendations**
+
+Since both rides and duration for casual users are more during weekends than weekdays. I suggest Cycllistic company to add some of the**offers** related to holiday, tourism or weekend to **weekday promotions.** By doing so, more casual users will be motivated to convert their membership since there will be a slight or no difference between the two membership types.  
+
+**Further Analysis**
+
+For further analysis, i think it will be necessary to know the preferred type of bikes, locations or most popular routes by casual users. This will help the company by to get insights which might lead them to offer the best promotions in those specific routes to convert more casual users to member users. 
+
+### Thank you for reading, i hope you enjoyed.                                                                       
